@@ -18,13 +18,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         /*
          window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 480, height: 270),
-            styleMask: [.miniaturizable, .closable, .resizable, .titled],
-            backing: .buffered, defer: false)
-        window.center()
-        window.title = "No Storyboard Window"
-        window.contentView = NSHostingView(rootView: SwiftUIView())
-        window.makeKeyAndOrderFront(nil)
+         contentRect: NSRect(x: 0, y: 0, width: 480, height: 270),
+         styleMask: [.miniaturizable, .closable, .resizable, .titled],
+         backing: .buffered, defer: false)
+         window.center()
+         window.title = "No Storyboard Window"
+         window.contentView = NSHostingView(rootView: SwiftUIView())
+         window.makeKeyAndOrderFront(nil)
          */
         
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -32,8 +32,46 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let button = statusItem.button {
             button.image = NSImage(systemSymbolName: "1.circle", accessibilityDescription: "1")
         }
+        
+        setupMenus()
     }
     
+    func setupMenus() {
+        // 1
+        let menu = NSMenu()
+        
+        // 2
+        let one = NSMenuItem(title: "One", action: #selector(didTapOne) , keyEquivalent: "1")
+        menu.addItem(one)
+        
+        let two = NSMenuItem(title: "Two", action: #selector(didTapTwo) , keyEquivalent: "2")
+        menu.addItem(two)
+        
+        let three = NSMenuItem(title: "Three", action: #selector(didTapThree) , keyEquivalent: "3")
+        menu.addItem(three)
+        
+        menu.addItem(NSMenuItem.separator())
+        
+        menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        
+        // 3
+        statusItem.menu = menu
+    }
+    
+    @objc
+    func didTapOne() {
+        // TODO
+    }
+    
+    @objc
+    func didTapTwo() {
+        // TODO
+    }
+    
+    @objc
+    func didTapThree() {
+        // TODO
+    }
 }
 
 struct SwiftUIView: View {
