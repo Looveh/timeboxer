@@ -14,7 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private var statusItem: NSStatusItem!
     
-    private var countdown = 5000;
+    private var countdown = 10;
     
     private var timer: Timer!;
     
@@ -81,7 +81,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func countdownLabel() -> String {
         if countdown <= 0 {
-            return ""
+            return "Done"
         }
         
         let hours = countdown / 3600
@@ -96,6 +96,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         countdown -= 1
         
         drawLabel()
+        
+        if countdown <= 0 {
+            timer.invalidate()
+        }
     }
     
     private func changeStatusBarButton(number: Int) {
