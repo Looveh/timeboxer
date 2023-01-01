@@ -32,13 +32,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func setupMenus() {
         let menu = NSMenu()
-
+        
         menuStartItem = NSMenuItem(
             title: "Start",
             action: #selector(didTapStart),
             keyEquivalent: "s"
         )
-
+        
         menuStopItem = NSMenuItem(
             title: "Stop",
             action: #selector(didTapStop),
@@ -125,7 +125,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @objc
     func didTapStart() {
-        // TODO
+        let alert = NSAlert()
+        alert.messageText = "Timebox for"
+        alert.addButton(withTitle: "Start")
+        alert.addButton(withTitle: "Cancel")
+        
+        let inputTextField = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 24))
+        inputTextField.placeholderString = ("minutes")
+        alert.accessoryView = inputTextField
+        alert.runModal()
+
+        countdown = Int(inputTextField.intValue) * 60
+        
+        startTimer()
+
+        drawLabel()
     }
     
     @objc
