@@ -13,7 +13,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private var statusItem: NSStatusItem!
     
-    private var countdown = 10;
+    private var menuStartItem: NSMenuItem!
+    private var menuStopItem: NSMenuItem!
+    
+    private var countdown = 5;
     
     private var timer: Timer!;
     
@@ -28,15 +31,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func setupMenus() {
-        let one = NSMenuItem(title: "One", action: #selector(didTapOne) , keyEquivalent: "1")
-        let two = NSMenuItem(title: "Two", action: #selector(didTapTwo) , keyEquivalent: "2")
-        let three = NSMenuItem(title: "Three", action: #selector(didTapThree) , keyEquivalent: "3")
-
         let menu = NSMenu()
 
-        menu.addItem(one)
-        menu.addItem(two)
-        menu.addItem(three)
+        menuStartItem = NSMenuItem(
+            title: "Start",
+            action: #selector(didTapStart),
+            keyEquivalent: "s"
+        )
+
+        menuStopItem = NSMenuItem(
+            title: "Stop",
+            action: #selector(didTapStop),
+            keyEquivalent: "s"
+        )
+        menuStopItem?.isHidden = true
+        
+        menu.addItem(menuStartItem)
+        menu.addItem(menuStopItem)
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(
             title: "Quit",
@@ -55,6 +66,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             userInfo: nil,
             repeats: true
         )
+        
+        menuStartItem?.isHidden = true
+        menuStopItem?.isHidden = false
     }
     
     func drawLabel() {
@@ -92,28 +106,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         drawLabel()
         
         if countdown <= 0 {
+            stopTimer()
+        }
+    }
+    
+    func stopTimer() {
+        if timer.isValid {
             timer.invalidate()
-        }
-    }
-    
-    private func changeStatusBarButton(number: Int) {
-        if let button = statusItem.button {
-            button.image = NSImage(systemSymbolName: "\(number).circle", accessibilityDescription: number.description)
+            menuStartItem.isHidden = false
+            menuStopItem.isHidden = true
         }
     }
     
     @objc
-    func didTapOne() {
-        changeStatusBarButton(number: 1)
+    func didTapStart() {
+        // TODO
     }
     
     @objc
-    func didTapTwo() {
-        changeStatusBarButton(number: 2)
-    }
-    
-    @objc
-    func didTapThree() {
-        changeStatusBarButton(number: 3)
+    func didTapStop() {
+        stopTimer()
     }
 }
