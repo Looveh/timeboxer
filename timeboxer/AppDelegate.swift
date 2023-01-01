@@ -82,21 +82,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         let hours = countdown / 3600
         let minutes = countdown % 3600 / 60
-        let seconds = countdown % 60
         
         var label = ""
         
         if hours > 0 {
             label += "\(hours)h "
         }
-        
-        if minutes > 0 || hours > 0 {
-            label += "\(minutes)m "
-        }
-        
-        label += "\(seconds)s"
-        
-        return label
+
+        return label + "\(minutes + 1)m "
     }
     
     @objc
@@ -133,7 +126,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         alert.accessoryView = inputTextField
         alert.runModal()
 
-        countdown = Int(inputTextField.intValue) * 60
+        countdown = Int(inputTextField.intValue) * 60 - 14
         
         startTimer()
 
