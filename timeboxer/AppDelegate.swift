@@ -14,7 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private var statusItem: NSStatusItem!
     
-    private var countdown = 0;
+    private var countdown = 5000;
     
     private var timer: Timer!;
     
@@ -32,10 +32,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
          */
         
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-     
+        
         if let button = statusItem.button {
             button.image = NSImage(systemSymbolName: "1.circle", accessibilityDescription: "1")
         }
+        
+        drawLabel()
         
         setupMenus()
         
@@ -62,7 +64,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func startTimer() {
-       timer = Timer.scheduledTimer(
+        timer = Timer.scheduledTimer(
             timeInterval: 1.0,
             target: self,
             selector: #selector(timerTimeout),
@@ -71,13 +73,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         )
     }
     
+    func drawLabel() {
+        if let button = statusItem.button {
+            button.title = countdownLabel()
+        }
+    }
+    
+    func countdownLabel() -> String {
+        if countdown <= 0 {
+            return ""
+        }
+        
+        let hours = countdown / 3600
+        let minutes = countdown % 3600 / 60
+        let seconds = countdown % 60
+        
+        return "\(hours)h \(minutes)m \(seconds)s"
+    }
+    
     @objc
     func timerTimeout() {
-        countdown += 1;
+        countdown -= 1
         
-        if let button = statusItem.button {
-           button.title = "\(countdown)"
-        }
+        drawLabel()
     }
     
     private func changeStatusBarButton(number: Int) {
