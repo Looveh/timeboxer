@@ -14,6 +14,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private var statusItem: NSStatusItem!
     
+    private var countdown = 0;
+    
+    private var timer: Timer!;
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         
         /*
@@ -28,19 +32,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
          */
         
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        // 3
+     
         if let button = statusItem.button {
             button.image = NSImage(systemSymbolName: "1.circle", accessibilityDescription: "1")
         }
         
         setupMenus()
+        
+        startTimer()
     }
     
     func setupMenus() {
-        // 1
         let menu = NSMenu()
         
-        // 2
         let one = NSMenuItem(title: "One", action: #selector(didTapOne) , keyEquivalent: "1")
         menu.addItem(one)
         
@@ -54,10 +58,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         
-        // 3
         statusItem.menu = menu
     }
     
+    func startTimer() {
+       timer = Timer.scheduledTimer(
+            timeInterval: 1.0,
+            target: self,
+            selector: #selector(timerTimeout),
+            userInfo: nil,
+            repeats: true
+        )
+    }
+    
+    @objc
+    func timerTimeout() {
+        countdown += 1;
+        
+        if let button = statusItem.button {
+           button.title = "\(countdown)"
+        }
+    }
     
     private func changeStatusBarButton(number: Int) {
         if let button = statusItem.button {
