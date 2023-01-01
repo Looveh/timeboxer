@@ -26,8 +26,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         drawLabel()
         
         setupMenus()
-        
-        startTimer()
     }
     
     func setupMenus() {
