@@ -124,7 +124,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let inputTextField = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 24))
         inputTextField.placeholderString = ("minutes")
         alert.accessoryView = inputTextField
-        alert.runModal()
+        let response = alert.runModal()
+        
+        if response != NSApplication.ModalResponse.alertFirstButtonReturn {
+            return
+        }
 
         countdown = Int(inputTextField.intValue) * 60 - 14
         
