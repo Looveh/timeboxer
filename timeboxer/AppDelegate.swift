@@ -16,7 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var menuStartItem: NSMenuItem!
     private var menuStopItem: NSMenuItem!
     
-    private var countdown = -1;
+    private var endTime: Double!
     
     private var timer: Timer!;
     
@@ -74,31 +74,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func countdownLabel() -> String {
-        if countdown < 0 {
+        if endTime == nil {
             return "Timebox"
-        } else if countdown == 0 {
-            return "Done"
         }
         
-        let hours = countdown / 3600
-        let minutes = countdown % 3600 / 60
-        
-        var label = ""
-        
-        if hours > 0 {
-            label += "\(hours)h "
-        }
+        let diff = Int(endTime - NSDate().timeIntervalSince1970)
+        let hours = diff / 3600
+        let minutes = diff % 3600 / 60 + 1
 
-        return label + "\(minutes + 1)m "
+        if diff <= 0 {
+            return "Done"
+        } else if hours > 0 {
+            return "\(hours)h \(minutes)m"
+        } else {
+            return "\(minutes)m"
+        }
     }
     
     @objc
     func timerTimeout() {
-        countdown -= 1
-        
         drawLabel()
         
-        if countdown <= 0 {
+        if NSDate().timeIntervalSince1970 >= endTime {
             stopTimer()
         }
     }
@@ -130,7 +127,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
 
-        countdown = Int(inputTextField.intValue) * 60 - 14
+        endTime = NSDate().timeIntervalSince1970 + inputTextField.doubleValue * 60;
         
         startTimer()
 
@@ -139,7 +136,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @objc
     func didTapStop() {
-        countdown = -1
+        endTime = nil
         
         stopTimer()
     }
