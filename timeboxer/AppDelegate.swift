@@ -16,7 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var menuStartItem: NSMenuItem!
     private var menuStopItem: NSMenuItem!
     
-    private var countdown = 5;
+    private var countdown = -1;
     
     private var timer: Timer!;
     
@@ -76,7 +76,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func countdownLabel() -> String {
-        if countdown <= 0 {
+        if countdown < 0 {
+            return "Timebox"
+        } else if countdown == 0 {
             return "Done"
         }
         
@@ -113,9 +115,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func stopTimer() {
         if timer.isValid {
             timer.invalidate()
-            menuStartItem.isHidden = false
-            menuStopItem.isHidden = true
         }
+        
+        menuStartItem.isHidden = false
+        menuStopItem.isHidden = true
+        
+        drawLabel()
     }
     
     @objc
@@ -125,6 +130,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @objc
     func didTapStop() {
+        countdown = -1
+        
         stopTimer()
     }
 }
