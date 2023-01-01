@@ -58,19 +58,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem.menu = menu
     }
     
+    
+    private func changeStatusBarButton(number: Int) {
+        if let button = statusItem.button {
+            button.image = NSImage(systemSymbolName: "\(number).circle", accessibilityDescription: number.description)
+        }
+    }
+    
     @objc
     func didTapOne() {
-        // TODO
+        changeStatusBarButton(number: 1)
     }
     
     @objc
     func didTapTwo() {
-        // TODO
+        changeStatusBarButton(number: 2)
     }
     
     @objc
     func didTapThree() {
-        // TODO
+        changeStatusBarButton(number: 3)
     }
 }
 
