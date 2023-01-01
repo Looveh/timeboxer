@@ -6,7 +6,6 @@
 //
 
 import Cocoa
-import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     
@@ -19,23 +18,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var timer: Timer!;
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        
-        /*
-         window = NSWindow(
-         contentRect: NSRect(x: 0, y: 0, width: 480, height: 270),
-         styleMask: [.miniaturizable, .closable, .resizable, .titled],
-         backing: .buffered, defer: false)
-         window.center()
-         window.title = "No Storyboard Window"
-         window.contentView = NSHostingView(rootView: SwiftUIView())
-         window.makeKeyAndOrderFront(nil)
-         */
-        
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        
-        if let button = statusItem.button {
-            button.image = NSImage(systemSymbolName: "1.circle", accessibilityDescription: "1")
-        }
         
         drawLabel()
         
@@ -45,20 +28,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func setupMenus() {
-        let menu = NSMenu()
-        
         let one = NSMenuItem(title: "One", action: #selector(didTapOne) , keyEquivalent: "1")
-        menu.addItem(one)
-        
         let two = NSMenuItem(title: "Two", action: #selector(didTapTwo) , keyEquivalent: "2")
-        menu.addItem(two)
-        
         let three = NSMenuItem(title: "Three", action: #selector(didTapThree) , keyEquivalent: "3")
+
+        let menu = NSMenu()
+
+        menu.addItem(one)
+        menu.addItem(two)
         menu.addItem(three)
-        
         menu.addItem(NSMenuItem.separator())
-        
-        menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(
+            title: "Quit",
+            action: #selector(NSApplication.terminate(_:)),
+            keyEquivalent: "q"
+        ))
         
         statusItem.menu = menu
     }
@@ -74,9 +58,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func drawLabel() {
-        if let button = statusItem.button {
-            button.title = countdownLabel()
-        }
+        statusItem?.button?.title = countdownLabel()
     }
     
     func countdownLabel() -> String {
@@ -88,7 +70,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let minutes = countdown % 3600 / 60
         let seconds = countdown % 60
         
-        return "\(hours)h \(minutes)m \(seconds)s"
+        var label = ""
+        
+        if hours > 0 {
+            label += "\(hours)h "
+        }
+        
+        if minutes > 0 || hours > 0 {
+            label += "\(minutes)m "
+        }
+        
+        label += "\(seconds)s"
+        
+        return label
     }
     
     @objc
@@ -121,12 +115,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc
     func didTapThree() {
         changeStatusBarButton(number: 3)
-    }
-}
-
-struct SwiftUIView: View {
-    var body: some View {
-        Text("Hello, SwiftUI!")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
