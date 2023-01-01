@@ -50,10 +50,10 @@
 		A5BEBEB62961A700007A6640 /* timeboxer */ = {
 			isa = PBXGroup;
 			children = (
+				A5BEBEC62961A86A007A6640 /* main.swift */,
 				A5BEBEB72961A700007A6640 /* AppDelegate.swift */,
 				A5BEBEBB2961A701007A6640 /* Assets.xcassets */,
 				A5BEBEC02961A701007A6640 /* timeboxer.entitlements */,
-				A5BEBEC62961A86A007A6640 /* main.swift */,
 			);
 			path = timeboxer;
 			sourceTree = "<group>";
@@ -258,6 +258,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = "";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -283,6 +284,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = "";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
