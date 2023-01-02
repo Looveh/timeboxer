@@ -11,7 +11,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private var window: NSWindow!
     private var statusItem: NSStatusItem!
-    private var menuStartItem: NSMenuItem!
+    private var menuStartItems: [NSMenuItem] = []
     private var menuStopItem: NSMenuItem!
     private var timer: Timer!
     private var endTime: Double!
@@ -27,11 +27,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func setupMenus() {
         let menu = NSMenu()
         
-        menuStartItem = NSMenuItem(
-            title: "Start",
-            action: #selector(onClickStart),
-            keyEquivalent: "s"
-        )
+        menuStartItems = [
+            NSMenuItem(
+                title: "15 min",
+                action: #selector(onMenuClickPreset1),
+                keyEquivalent: "1"
+            ),
+            NSMenuItem(
+                title: "30 min",
+                action: #selector(onMenuClickPreset2),
+                keyEquivalent: "2"
+            ),
+            NSMenuItem(
+                title: "45 min",
+                action: #selector(onMenuClickPreset3),
+                keyEquivalent: "3"
+            ),
+            NSMenuItem(
+                title: "60 min",
+                action: #selector(onMenuClickPreset4),
+                keyEquivalent: "4"
+            ),
+            NSMenuItem(
+                title: "Custom",
+                action: #selector(onMenuClickCustom),
+                keyEquivalent: "c"
+            )
+        ]
         
         menuStopItem = NSMenuItem(
             title: "Stop",
@@ -40,7 +62,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         )
         menuStopItem?.isHidden = true
         
-        menu.addItem(menuStartItem)
+        for item in menuStartItems {
+            menu.addItem(item)
+        }
+        
         menu.addItem(menuStopItem)
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(
@@ -61,7 +86,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             repeats: true
         )
         
-        menuStartItem?.isHidden = true
+        for item in menuStartItems {
+            item.isHidden = true
+        }
+        
         menuStopItem?.isHidden = false
         
         drawLabel()
@@ -72,7 +100,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             timer.invalidate()
         }
         
-        menuStartItem.isHidden = false
+        for item in menuStartItems {
+            item.isHidden = false
+        }
+        
         menuStopItem.isHidden = true
         
         drawLabel()
@@ -110,7 +141,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @objc
-    func onClickStart() {
+    func onMenuClickPreset1() {
+        endTime = NSDate().timeIntervalSince1970 + 15 * 60
+        
+        startTimer()
+    }
+    
+    @objc
+    func onMenuClickPreset2() {
+        endTime = NSDate().timeIntervalSince1970 + 30 * 60
+        
+        startTimer()
+    }
+    
+    @objc
+    func onMenuClickPreset3() {
+        endTime = NSDate().timeIntervalSince1970 + 45 * 60
+        
+        startTimer()
+    }
+    
+    @objc
+    func onMenuClickPreset4() {
+        endTime = NSDate().timeIntervalSince1970 + 60 * 60
+        
+        startTimer()
+    }
+    
+    @objc
+    func onMenuClickCustom() {
         let inputTextField = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 24))
         inputTextField.placeholderString = ("minutes")
         
