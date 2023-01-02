@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import UserNotifications
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     
@@ -22,6 +23,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         drawLabel()
         
         setupMenus()
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { (_granted, _error) in }
     }
     
     func setupMenus() {
@@ -77,7 +80,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem.menu = menu
     }
     
-    func startTimer() {
+    func startTimer(endTime: Double) {
+        self.endTime = endTime
+        
         timer = Timer.scheduledTimer(
             timeInterval: 1.0,
             target: self,
@@ -92,6 +97,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         menuStopItem?.isHidden = false
         
+        scheduleNotifications(endTime: endTime)
+        
         drawLabel()
     }
     
@@ -105,6 +112,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         menuStopItem.isHidden = true
+        
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         
         drawLabel()
     }
@@ -131,6 +140,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem?.button?.title = label
     }
     
+    func scheduleNotifications(endTime: Double) {
+        let now = Date()
+        
+        for offset in [0, 5, 15] {
+            let fireAt = Date(timeIntervalSince1970: endTime - Double(offset) * 60)
+            
+            if fireAt < now {
+                continue
+            }
+            
+            let content = UNMutableNotificationContent()
+            content.title = "Timebox"
+            content.body = offset == 0 ? "Done" : "\(offset) min left"
+            content.sound = UNNotificationSound.default
+            
+            let trigger = UNCalendarNotificationTrigger(
+                dateMatching: Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: fireAt),
+                repeats: false
+            )
+
+            UNUserNotificationCenter.current().add(UNNotificationRequest(
+                identifier: UUID().uuidString,
+                content: content,
+                trigger: trigger
+            ))
+        }
+    }
+    
     @objc
     func timerTick() {
         drawLabel()
@@ -142,30 +179,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @objc
     func onMenuClickPreset1() {
-        endTime = NSDate().timeIntervalSince1970 + 15 * 60
-        
-        startTimer()
+        startTimer(endTime: NSDate().timeIntervalSince1970 + 15 * 60)
     }
     
     @objc
     func onMenuClickPreset2() {
-        endTime = NSDate().timeIntervalSince1970 + 30 * 60
-        
-        startTimer()
+        startTimer(endTime: NSDate().timeIntervalSince1970 + 30 * 60)
     }
     
     @objc
     func onMenuClickPreset3() {
-        endTime = NSDate().timeIntervalSince1970 + 45 * 60
-        
-        startTimer()
+        startTimer(endTime: NSDate().timeIntervalSince1970 + 45 * 60)
     }
     
     @objc
     func onMenuClickPreset4() {
-        endTime = NSDate().timeIntervalSince1970 + 60 * 60
-        
-        startTimer()
+        startTimer(endTime: NSDate().timeIntervalSince1970 + 60 * 60)
     }
     
     @objc
@@ -186,9 +215,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         
-        endTime = NSDate().timeIntervalSince1970 + inputTextField.doubleValue * 60
-        
-        startTimer()
+        startTimer(endTime: NSDate().timeIntervalSince1970 + inputTextField.doubleValue * 60)
     }
     
     @objc
